@@ -1,4 +1,4 @@
-%global module	pyvista
+%global module	scooby
 %global fname %(m=%{module}; echo ${m:0:1})
 
 Summary:	A Python lightweight environment detective
