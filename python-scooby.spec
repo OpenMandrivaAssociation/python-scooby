@@ -1,14 +1,11 @@
-%global module	scooby
-%global fname %(m=%{module}; echo ${m:0:1})
-
 Summary:	A Python lightweight environment detective
-Name:		python-%{module}
-Version:	0.6.0
+Name:		python-scooby
+Version:	0.7.0
 Release:	1
 Group:		Development/Python
 License:	MIT
 URL:		https://github.com/banesullivan/scooby
-Source0:	https://pypi.io/packages/source/%{fname}/%{module}/%{module}-%{version}.tar.gz
+Source0:	https://pypi.io/packages/source/s/scooby/scooby-%{version}.tar.gz
 
 BuildRequires:	pkgconfig(python)
 BuildRequires:	python3dist(pip)
@@ -23,8 +20,8 @@ BuildArch:	noarch
 %files
 %license LICENSE
 %doc README.md
-%{py_sitedir}/%{module}/
-%{py_sitedir}/%{module}-%{version}.dist-info/
+%{py_sitedir}/scooby/
+%{py_sitedir}/scooby*-info/
 
 #----------------------------------------------------------------------------
 
@@ -33,7 +30,7 @@ This is a lightweight tool for easily reporting your Python environment's
 package versions and hardware resources.
 
 %prep
-%autosetup -n %{module}-%{version}
+%autosetup -n scooby-%{version}
 
 %build
 %py_build
