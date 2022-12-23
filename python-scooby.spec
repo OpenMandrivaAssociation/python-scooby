@@ -20,6 +20,7 @@ BuildArch:	noarch
 %files
 %license LICENSE
 %doc README.md
+%{_bindir}/scooby
 %{py_sitedir}/scooby/
 %{py_sitedir}/scooby*-info/
 
