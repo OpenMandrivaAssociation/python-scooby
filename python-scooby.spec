@@ -1,6 +1,6 @@
 Summary:	A Python lightweight environment detective
 Name:		python-scooby
-Version:	0.7.2
+Version:	0.9.2
 Release:	1
 Group:		Development/Python
 License:	MIT
