@@ -45,12 +45,14 @@ export SETUPTOOLS_SCM_PRETEND_VERSION="%{version}"
 
 %if %{with tests}
 %check
-# deselect linting tests as we dont package python-script-runner which that test requires.
+# Deselect linting tests as we dont package python-script-runner which that test requires.
 skiptests+="not test_get_version"
 skiptests+=" and not test_tracking"
 skiptests+=" and not test_import_os_error"
 skiptests+=" and not test_import_time"
 export CI=true
+# Append buildroot bindir to PATH so that test_cli can find the executable.
+export PATH="%{buildroot}%{_bindir}:$PATH"
 export PYTHONPATH="%{buildroot}%{python_sitelib}:${PWD}"
 pytest -k "$skiptests"
 %endif
