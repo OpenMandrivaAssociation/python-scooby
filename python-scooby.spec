@@ -3,24 +3,30 @@
 
 Name:		python-scooby
 Summary:	A Python lightweight environment detective
-Version:	0.11.0
+Version:	0.11.2
 Release:	1
 Group:		Development/Python
 License:	MIT
 URL:		https://github.com/banesullivan/scooby
 Source0:	https://github.com/banesullivan/scooby/archive/v%{version}/%{module}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
-BuildArch:		noarch
+
 BuildSystem:	python
+BuildArch:		noarch
 BuildRequires:	pkgconfig(python)
 BuildRequires:	python%{pyver}dist(pip)
 BuildRequires:	python%{pyver}dist(psutil)
 BuildRequires:	python%{pyver}dist(setuptools)
 BuildRequires:	python%{pyver}dist(setuptools-scm)
 BuildRequires:	python%{pyver}dist(wheel)
+BuildRequires:	tomcli
 %if %{with tests}
+BuildRequires:	python-numpy-f2py
+BuildRequires:	python%{pyver}dist(beautifulsoup4)
 BuildRequires:	python%{pyver}dist(numpy)
 BuildRequires:	python%{pyver}dist(pytest)
-BuildRequires:	python%{pyver}dist(beautifulsoup4)
+BuildRequires:	python%{pyver}dist(pytest-console-scripts)
+BuildRequires:	python%{pyver}dist(scipy)
+BuildRequires:	time
 %endif
 # extra
 Recommends:		python%{pyver}dist(psutil)
@@ -29,27 +35,24 @@ Recommends:		python%{pyver}dist(psutil)
 This is a lightweight tool for easily reporting your Python environment's
 package versions and hardware resources.
 
-%prep
-%autosetup -n %{module}-%{version} -p1
-# Remove bundled egg-info
-rm -rf %{module}.egg-info
+%prep -a
 # omit linters from tests
-sed -r -i 's/^(mkl|pyvips|no_version|pytest-cov)\b/# &/' requirements_test.txt
+tomcli set pyproject.toml lists delitem 'dependency-groups.test' \
+    '(mkl|pyvips|no-version|pytest-cov)\b.*'
 
-%build
+%build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION="%{version}"
-%py_build
 
 %if %{with tests}
-# deselect linting tests and test_cli as we dont package python-script-runner which that test requires.
-k="${k-}${k+ and }not test_get_version"
-k="${k-}${k+ and }not test_tracking"
-k="${k-}${k+ and }not test_import_os_error"
-k="${k-}${k+ and }not test_import_time"
-k="${k-}${k+ and }not test_cli"
+%check
+# deselect linting tests as we dont package python-script-runner which that test requires.
+skiptests+="not test_get_version"
+skiptests+=" and not test_tracking"
+skiptests+=" and not test_import_os_error"
+skiptests+=" and not test_import_time"
 export CI=true
 export PYTHONPATH="%{buildroot}%{python_sitelib}:${PWD}"
-pytest -k "${k-}" -v tests/
+pytest -k "$skiptests"
 %endif
 
 %files
