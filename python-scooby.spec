@@ -4,7 +4,7 @@
 Name:		python-scooby
 Summary:	A Python lightweight environment detective
 Version:	0.11.2
-Release:	1
+Release:	2
 Group:		Development/Python
 License:	MIT
 URL:		https://github.com/banesullivan/scooby
@@ -12,7 +12,7 @@ Source0:	https://github.com/banesullivan/scooby/archive/v%{version}/%{module}-%{
 
 BuildSystem:	python
 BuildArch:		noarch
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	python%{pyver}dist(pip)
 BuildRequires:	python%{pyver}dist(psutil)
 BuildRequires:	python%{pyver}dist(setuptools)
